@@ -76,7 +76,7 @@ class BalanceWindow:
         bar.pack_propagate(False)
 
         tk.Label(
-            bar, text="🔹 DS 余额",
+            bar, text="DS 余额",
             fg=COLOR_TEXT, bg=COLOR_BG, font=(FONT, 10, "bold"),
             anchor="w"
         ).pack(side=tk.LEFT, padx=10, pady=3)
