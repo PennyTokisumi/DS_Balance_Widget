@@ -151,6 +151,7 @@ class DeepSeekWidget:
         self._running = False
         if self._refresh_timer:
             self.window.root.after_cancel(self._refresh_timer)
+        self.window._save_position()      # 退出前保存窗口位置
         cleanup_instance()
         try:
             self.tray.stop()
@@ -246,8 +247,9 @@ class DeepSeekWidget:
         dlg.wait()                # 阻塞直到用户关闭设置窗口
         self._settings_dlg = None
 
-        # 设置关闭后刷新余额，恢复正常的自动淡出
-        self.manual_refresh()
+        # 只有保存时才刷新余额，取消时不浪费 API 调用
+        if dlg.saved:
+            self.manual_refresh()
 
     def _on_saved(self, new_config: dict):
         self.config = new_config
@@ -257,15 +259,14 @@ class DeepSeekWidget:
             self.window.root.after_cancel(self._refresh_timer)
             self._refresh_timer = None
         self._schedule_auto_refresh()
-        # _do_show_settings 在设置窗口关闭后会统一刷新余额
+        # _do_show_settings 在设置窗口关闭后会通过 dlg.saved 判断是否刷新余额
 
 
 # ── 开机自启动管理 ────────────────────────────────────
 
 def _get_startup_path() -> Path:
     """Windows 启动文件夹路径"""
-    import os as _os
-    startup = Path(_os.environ["APPDATA"]) / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
+    startup = Path(os.environ["APPDATA"]) / "Microsoft" / "Windows" / "Start Menu" / "Programs" / "Startup"
     return startup / "deepseek-widget.bat"
 
 
@@ -274,7 +275,7 @@ def set_auto_start(enabled: bool, script_dir: str) -> None:
     startup_file = _get_startup_path()
     if enabled:
         pythonw = sys.executable.replace("python.exe", "pythonw.exe")
-        if not os.path.exists(pythonw):
+        if not os.path.isfile(pythonw):
             pythonw = sys.executable  # venv 环境回退到 python.exe
         content = (
             f'@echo off\n'
@@ -300,6 +301,7 @@ class SettingsDialog:
     def __init__(self, parent, config: dict, on_save=None):
         self.config = config
         self.on_save = on_save
+        self.saved = False
 
         self.dlg = tk.Toplevel(parent)
         self.dlg.title("DS 余额 — 设置")
@@ -420,6 +422,7 @@ class SettingsDialog:
         set_auto_start(enable_auto, script_dir)
 
         self.dlg.destroy()
+        self.saved = True
         if self.on_save:
             self.on_save(self.config)
 

@@ -10,9 +10,12 @@ _ICON_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ds_icon.p
 
 
 def _load_icon() -> Image.Image:
-    """加载鲸鱼图标"""
+    """加载鲸鱼图标，损坏时回退到纯色圆形"""
     if os.path.exists(_ICON_PATH):
-        return Image.open(_ICON_PATH)
+        try:
+            return Image.open(_ICON_PATH)
+        except Exception:
+            pass
     # 回退：纯色圆形
     from PIL import ImageDraw
     img = Image.new("RGBA", (32, 32), (0, 0, 0, 0))
