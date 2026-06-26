@@ -9,7 +9,7 @@ from config import save_config
 # 颜色
 COLOR_GREEN  = "#4CAF50"
 COLOR_YELLOW = "#FFC107"
-COLOR_ORANGE = "#FF5722"   # 介于警告黄 #FFC107 与错误红 #F44336 之间
+COLOR_ORANGE = "#FF9800"   # 介于警告黄 #FFC107 与错误红 #F44336 之间
 COLOR_RED    = "#F44336"
 COLOR_BG     = "#1E1E2E"
 COLOR_TEXT   = "#CDD6F4"
