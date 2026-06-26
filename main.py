@@ -1,7 +1,7 @@
 """
 主入口 — 悬浮窗口 + 系统托盘 + 自动刷新 + 单实例检测
 """
-__version__ = "1.2"
+__version__ = "1.3"
 import ctypes
 import sys
 import os
