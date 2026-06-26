@@ -27,6 +27,9 @@ def load_config() -> dict:
     try:
         with open(CONFIG_FILE, "r", encoding="utf-8") as f:
             saved = json.load(f)
+        # 旧版配置迁移: 旧默认警告阈值 20 更新为新默认 10
+        if saved.get("warning_threshold") == 20.0:
+            saved["warning_threshold"] = 10.0
         config = dict(DEFAULT_CONFIG)
         config.update(saved)
         return config
