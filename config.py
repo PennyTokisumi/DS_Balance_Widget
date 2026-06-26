@@ -15,7 +15,7 @@ DEFAULT_CONFIG = {
     "window_y": None,
     "window_on_top": True,
     "opacity": 0.85,
-    "warning_threshold": 20.0,
+    "warning_threshold": 10.0,
     "alert_threshold": 5.0,
     "auto_start": False,              # 开机自启动
 }

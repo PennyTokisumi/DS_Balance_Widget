@@ -9,6 +9,7 @@ from config import save_config
 # 颜色
 COLOR_GREEN  = "#4CAF50"
 COLOR_YELLOW = "#FF9800"
+COLOR_ORANGE = "#FF5722"   # 介于警告黄 #FF9800 与错误红 #F44336 之间
 COLOR_RED    = "#F44336"
 COLOR_BG     = "#1E1E2E"
 COLOR_TEXT   = "#CDD6F4"
@@ -176,11 +177,11 @@ class BalanceWindow:
             warn = self.config.get("warning_threshold", 20)
             alert = self.config.get("alert_threshold", 5)
             if total <= alert:
-                color = COLOR_RED
+                color = COLOR_ORANGE
             elif total <= warn:
                 color = COLOR_YELLOW
             else:
-                color = COLOR_TEXT
+                color = COLOR_GREEN
 
             self.lbl_currency.config(fg=color)
             if total >= 1000:
